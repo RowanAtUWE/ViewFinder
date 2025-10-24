@@ -53,12 +53,12 @@ public class CustomFrustumLocalSpace : MonoBehaviour
         bottomPrimitivePlaneMC = bottomPrimitivePlane.GetComponent<MeshCollider>();
         bottomPrimitivePlaneMC.convex = true;
         bottomPrimitivePlaneMC.isTrigger = true;
-        bottomPrimitivePlaneMC.enabled= false;
+        bottomPrimitivePlaneMC.enabled = false;
 
         frustumObjectMC = frustumObject.GetComponent<MeshCollider>();
         frustumObjectMC.convex = true;
         frustumObjectMC.isTrigger = true;
-        frustumObjectMC.enabled= false;
+        frustumObjectMC.enabled = false;
 
         leftPrimitivePlaneMF = leftPrimitivePlane.GetComponent<MeshFilter>();
         rightPrimitivePlaneMF = rightPrimitivePlane.GetComponent<MeshFilter>();
@@ -103,10 +103,10 @@ public class CustomFrustumLocalSpace : MonoBehaviour
         var frustumHeight = 2.0f * finder.farClipPlane * Mathf.Tan(finder.fieldOfView * 0.5f * Mathf.Deg2Rad);
         var frustumWidth = frustumHeight * aspectRatio;
 
-        leftUpFrustum = new Vector3(-frustumWidth/2, frustumHeight/2, finder.farClipPlane);
-        rightUpFrustum = new Vector3(frustumWidth/2, frustumHeight/2, finder.farClipPlane);
-        leftDownFrustum = new Vector3(-frustumWidth/2, -frustumHeight/2, finder.farClipPlane);
-        rightDownFrustum = new Vector3(frustumWidth/2, -frustumHeight/2, finder.farClipPlane);
+        leftUpFrustum = new Vector3(-frustumWidth / 2, frustumHeight / 2, finder.farClipPlane);
+        rightUpFrustum = new Vector3(frustumWidth / 2, frustumHeight / 2, finder.farClipPlane);
+        leftDownFrustum = new Vector3(-frustumWidth / 2, -frustumHeight / 2, finder.farClipPlane);
+        rightDownFrustum = new Vector3(frustumWidth / 2, -frustumHeight / 2, finder.farClipPlane);
 
         leftUpFrustum = capturePoint.transform.TransformPoint(leftUpFrustum);
         rightUpFrustum = capturePoint.transform.TransformPoint(rightUpFrustum);
@@ -122,23 +122,23 @@ public class CustomFrustumLocalSpace : MonoBehaviour
         bottomPlane = new Plane(cameraPos, leftDownFrustum, rightDownFrustum);
 
         var leftOffset = leftPlane.normal * customOffset;
-        leftPrimitivePlaneMF.mesh = CreateBoxMesh(cameraPos, leftUpFrustum, (leftUpFrustum + leftDownFrustum)/2 ,leftDownFrustum,
-        leftDownFrustum + leftOffset, ((leftUpFrustum + leftDownFrustum)/2) + leftOffset, leftUpFrustum + leftOffset, cameraPos + leftOffset);
+        leftPrimitivePlaneMF.mesh = CreateBoxMesh(cameraPos, leftUpFrustum, (leftUpFrustum + leftDownFrustum) / 2, leftDownFrustum,
+        leftDownFrustum + leftOffset, ((leftUpFrustum + leftDownFrustum) / 2) + leftOffset, leftUpFrustum + leftOffset, cameraPos + leftOffset);
         leftPrimitivePlaneMC.sharedMesh = leftPrimitivePlaneMF.mesh;
 
         var rightOffset = rightPlane.normal * customOffset;
-        rightPrimitivePlaneMF.mesh = CreateBoxMesh(cameraPos, rightDownFrustum, (rightUpFrustum + rightDownFrustum)/2 , rightUpFrustum,
-        rightUpFrustum + rightOffset, ((rightUpFrustum + rightDownFrustum)/2) + rightOffset, rightDownFrustum + rightOffset, cameraPos + rightOffset);
+        rightPrimitivePlaneMF.mesh = CreateBoxMesh(cameraPos, rightDownFrustum, (rightUpFrustum + rightDownFrustum) / 2, rightUpFrustum,
+        rightUpFrustum + rightOffset, ((rightUpFrustum + rightDownFrustum) / 2) + rightOffset, rightDownFrustum + rightOffset, cameraPos + rightOffset);
         rightPrimitivePlaneMC.sharedMesh = rightPrimitivePlaneMF.mesh;
 
         var topOffset = topPlane.normal * customOffset;
-        topPrimitivePlaneMF.mesh = CreateBoxMesh(cameraPos, rightUpFrustum, (leftUpFrustum + rightUpFrustum)/2 ,leftUpFrustum,
-        leftUpFrustum + topOffset, ((leftUpFrustum + rightUpFrustum)/2) + topOffset, rightUpFrustum + topOffset, cameraPos + topOffset);
+        topPrimitivePlaneMF.mesh = CreateBoxMesh(cameraPos, rightUpFrustum, (leftUpFrustum + rightUpFrustum) / 2, leftUpFrustum,
+        leftUpFrustum + topOffset, ((leftUpFrustum + rightUpFrustum) / 2) + topOffset, rightUpFrustum + topOffset, cameraPos + topOffset);
         topPrimitivePlaneMC.sharedMesh = topPrimitivePlaneMF.mesh;
 
         var bottomOffset = bottomPlane.normal * customOffset;
-        bottomPrimitivePlaneMF.mesh = CreateBoxMesh(cameraPos, leftDownFrustum, (leftDownFrustum + rightDownFrustum)/2 ,rightDownFrustum,
-        rightDownFrustum + bottomOffset, ((leftDownFrustum + rightDownFrustum)/2) + bottomOffset, leftDownFrustum + bottomOffset, cameraPos + bottomOffset);
+        bottomPrimitivePlaneMF.mesh = CreateBoxMesh(cameraPos, leftDownFrustum, (leftDownFrustum + rightDownFrustum) / 2, rightDownFrustum,
+        rightDownFrustum + bottomOffset, ((leftDownFrustum + rightDownFrustum) / 2) + bottomOffset, leftDownFrustum + bottomOffset, cameraPos + bottomOffset);
         bottomPrimitivePlaneMC.sharedMesh = bottomPrimitivePlaneMF.mesh;
 
         //CUTTING PHASE
@@ -157,7 +157,8 @@ public class CustomFrustumLocalSpace : MonoBehaviour
         StartCoroutine(TestCut(isTakingPicture));
     }
 
-    IEnumerator TestCut(bool isTakingPicture) {
+    IEnumerator TestCut(bool isTakingPicture)
+    {
 
         /* trick to give time to unity to detect collisions \ 1 frame isn't enough */
         yield return null;
@@ -173,7 +174,8 @@ public class CustomFrustumLocalSpace : MonoBehaviour
         List<GameObject> allObjects = new List<GameObject>();
         List<GameObject> intactObjects = new List<GameObject>();
 
-        foreach (var obj in leftToCut) {
+        foreach (var obj in leftToCut)
+        {
 
             if (isTakingPicture)
             {
@@ -201,7 +203,8 @@ public class CustomFrustumLocalSpace : MonoBehaviour
             allObjects.Add(newPiece);
         }
 
-        foreach (var obj in rightToCut) {
+        foreach (var obj in rightToCut)
+        {
 
             if (isTakingPicture)
             {
@@ -232,7 +235,7 @@ public class CustomFrustumLocalSpace : MonoBehaviour
             }
 
             int initialCount = cutPiece.chunks.Count;
-            for(int i = 0; i < initialCount; i++)
+            for (int i = 0; i < initialCount; i++)
             {
                 var newPiece = Cutter.Cut(cutPiece.chunks[i], (rightDownFrustum + rightUpFrustum + cameraPos) / 3, rightPlane.normal);
                 cutPiece.AddChunk(newPiece);
@@ -240,7 +243,8 @@ public class CustomFrustumLocalSpace : MonoBehaviour
             }
         }
 
-        foreach (var obj in topToCut) {
+        foreach (var obj in topToCut)
+        {
 
 
             var s = obj.name.Split('/');
@@ -269,7 +273,7 @@ public class CustomFrustumLocalSpace : MonoBehaviour
             }
 
             int initialCount = cutPiece.chunks.Count;
-            for(int i = 0; i < initialCount; i++)
+            for (int i = 0; i < initialCount; i++)
             {
                 var newPiece = Cutter.Cut(cutPiece.chunks[i], (leftUpFrustum + rightUpFrustum + cameraPos) / 3, topPlane.normal);
                 cutPiece.AddChunk(newPiece);
@@ -277,7 +281,8 @@ public class CustomFrustumLocalSpace : MonoBehaviour
             }
         }
 
-        foreach (var obj in bottomToCut) {
+        foreach (var obj in bottomToCut)
+        {
 
             var s = obj.name.Split('/');
             if (s.Length == 1)
@@ -305,7 +310,7 @@ public class CustomFrustumLocalSpace : MonoBehaviour
             }
 
             int initialCount = cutPiece.chunks.Count;
-            for(int i = 0; i < initialCount; i++)
+            for (int i = 0; i < initialCount; i++)
             {
                 var newPiece = Cutter.Cut(cutPiece.chunks[i], (leftDownFrustum + rightDownFrustum + cameraPos) / 3, bottomPlane.normal);
                 cutPiece.AddChunk(newPiece);
@@ -329,36 +334,40 @@ public class CustomFrustumLocalSpace : MonoBehaviour
         if (ending != null)
             objectsInFrustum.Add(ending);
 
-        if (isTakingPicture) {
+        if (isTakingPicture)
+        {
             activeFilm = new PolaroidFilm(objectsInFrustum, capturePoint);
 
-            foreach(var i in intactObjects)
+            foreach (var i in intactObjects)
                 i.SetActive(true);
 
-            foreach (var obj in allObjects) {
+            foreach (var obj in allObjects)
+            {
                 if (obj != null)
                     Destroy(obj);
             }
         }
-        else {
+        else
+        {
 
-            foreach(var obj in allObjects)
+            foreach (var obj in allObjects)
                 Destroy(obj.GetComponent<CutPiece>());
 
-            foreach(var obj in objectsInFrustum)
+            foreach (var obj in objectsInFrustum)
                 Destroy(obj);
 
             activeFilm.ActivateFilm();
         }
 
         yield return new WaitForSeconds(0.5f);
-        
+
         controller.ChangePlayerState(true);
     }
 
     public void AddObjectToCut(GameObject toCut, int side)
     {
-        switch (side) {
+        switch (side)
+        {
             case 0:
                 if (!leftToCut.Contains(toCut))
                     leftToCut.Add(toCut);
@@ -382,7 +391,8 @@ public class CustomFrustumLocalSpace : MonoBehaviour
         }
     }
 
-    public void AddEndingObject(GameObject end) {
+    public void AddEndingObject(GameObject end)
+    {
         ending = end;
     }
 
@@ -469,10 +479,10 @@ public class CustomFrustumLocalSpace : MonoBehaviour
         var frustumHeight = 2.0f * finder.farClipPlane * Mathf.Tan(finder.fieldOfView * 0.5f * Mathf.Deg2Rad);
         var frustumWidth = frustumHeight * aspectRatio;
 
-        var leftUpF = new Vector3(-frustumWidth/2, frustumHeight/2, finder.farClipPlane);
-        var rightUpF = new Vector3(frustumWidth/2, frustumHeight/2, finder.farClipPlane);
-        var leftDownF = new Vector3(-frustumWidth/2, -frustumHeight/2, finder.farClipPlane);
-        var rightDownF = new Vector3(frustumWidth/2, -frustumHeight/2, finder.farClipPlane);
+        var leftUpF = new Vector3(-frustumWidth / 2, frustumHeight / 2, finder.farClipPlane);
+        var rightUpF = new Vector3(frustumWidth / 2, frustumHeight / 2, finder.farClipPlane);
+        var leftDownF = new Vector3(-frustumWidth / 2, -frustumHeight / 2, finder.farClipPlane);
+        var rightDownF = new Vector3(frustumWidth / 2, -frustumHeight / 2, finder.farClipPlane);
 
         leftUpF = capturePoint.transform.TransformPoint(leftUpF);
         rightUpF = capturePoint.transform.TransformPoint(rightUpF);
@@ -492,11 +502,14 @@ public class CustomFrustumLocalSpace : MonoBehaviour
     }
 }
 
-public class PolaroidFilm {
+public class PolaroidFilm
+{
     List<GameObject> placeHolders;
-    public PolaroidFilm(List<GameObject> obj, Transform parentToFollow) {
+    public PolaroidFilm(List<GameObject> obj, Transform parentToFollow)
+    {
         placeHolders = new List<GameObject>();
-        foreach(var o in obj) {
+        foreach (var o in obj)
+        {
             var placeholder = GameObject.Instantiate(o);
             placeholder.transform.position = o.transform.position;
             placeholder.transform.rotation = o.transform.rotation;
@@ -506,8 +519,10 @@ public class PolaroidFilm {
         }
     }
 
-    public void ActivateFilm() {
-        for (int i = 0; i < placeHolders.Count; i++) {
+    public void ActivateFilm()
+    {
+        for (int i = 0; i < placeHolders.Count; i++)
+        {
             placeHolders[i].transform.SetParent(null);
             placeHolders[i].SetActive(true);
         }
