@@ -6,7 +6,7 @@ using UnityEngine.Rendering.HighDefinition;
 public class PlayerController : MonoBehaviour
 {
     public float speed = 6.0f;
-    public float mouseSensitivity = 100.0f;
+    public float mouseSensitivity = 300.0f;
     public Transform cameraHolder;
     public bool isMoving;
     public Transform filmPos;

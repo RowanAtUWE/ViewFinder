@@ -31,7 +31,7 @@ public class Polaroid : MonoBehaviour
         animator = GetComponent<Animator>();
         frames.text = photoNumber.ToString();
         checkTimer = waitTime;
-        ppProfile.sharedProfile.TryGet<DepthOfField>(out depthOfField);
+        ppProfile.profile.TryGet<DepthOfField>(out depthOfField);
         depthOfField.active = false;
         polaroidCamera.SetActive(false);
         viewFinder.SetActive(false);
