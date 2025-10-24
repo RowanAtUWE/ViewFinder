@@ -9,15 +9,11 @@ and this video: https://www.youtube.com/watch?v=1UsuZsaUUng&t=7s
 
 public class Cutter : MonoBehaviour
 {
-    private static bool isBusy;
     private static Mesh originalMesh;
 
     public static GameObject Cut(GameObject originalGameObject, Vector3 contactPoint, Vector3 cutNormal)
     {
-        if(isBusy)
-            return null;
-
-        isBusy = true;
+        // isBusy flag has been REMOVED.
 
         Plane cutPlane = new Plane(originalGameObject.transform.InverseTransformDirection(-cutNormal), originalGameObject.transform.InverseTransformPoint(contactPoint));
         originalMesh = originalGameObject.GetComponent<MeshFilter>().mesh;
@@ -31,8 +27,8 @@ public class Cutter : MonoBehaviour
         List<Vector3> addedVertices = new List<Vector3>();
         GeneratedMesh leftMesh = new GeneratedMesh();
         GeneratedMesh rightMesh = new GeneratedMesh();
-        
-        SeparateMeshes(leftMesh,rightMesh,cutPlane,addedVertices);
+
+        SeparateMeshes(leftMesh, rightMesh, cutPlane, addedVertices);
 
         FillCut(addedVertices, cutPlane, leftMesh, rightMesh);
 
@@ -47,12 +43,12 @@ public class Cutter : MonoBehaviour
         var collider = originalGameObject.AddComponent<MeshCollider>();
         collider.sharedMesh = finishedLeftMesh;
         collider.convex = true;
-        
+
         var mat = originalGameObject.GetComponent<MeshRenderer>().material;
 
         Material[] mats = new Material[finishedLeftMesh.subMeshCount];
         for (int i = 0; i < finishedLeftMesh.subMeshCount; i++)
-		{
+        {
             mats[i] = mat;
         }
         originalGameObject.GetComponent<MeshRenderer>().materials = mats;
@@ -62,28 +58,26 @@ public class Cutter : MonoBehaviour
         right.transform.rotation = originalGameObject.transform.rotation;
         right.transform.localScale = originalGameObject.transform.localScale;
         right.AddComponent<MeshRenderer>();
-        
+
         mats = new Material[finishedRightMesh.subMeshCount];
         for (int i = 0; i < finishedRightMesh.subMeshCount; i++)
-		{
+        {
             mats[i] = mat;
         }
         right.GetComponent<MeshRenderer>().materials = mats;
         right.AddComponent<MeshFilter>().mesh = finishedRightMesh;
-        
+
         right.AddComponent<MeshCollider>().sharedMesh = finishedRightMesh;
         var cols = right.GetComponents<MeshCollider>();
         foreach (var col in cols)
         {
             col.convex = true;
         }
-        
+
         var rightRigidbody = right.AddComponent<Rigidbody>();
         rightRigidbody.isKinematic = true;
 
         right.name = originalGameObject.name + Random.Range(0, 9999);
-
-        isBusy = false;
 
         right.layer = LayerMask.NameToLayer("Cuttable");
 

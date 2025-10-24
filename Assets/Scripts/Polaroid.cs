@@ -16,12 +16,14 @@ public class Polaroid : MonoBehaviour
     public Volume ppProfile;
     public CustomFrustumLocalSpace customFrustumLocalSpace;
     public GameObject objectToRotate;
+    public CustomFrustumLocalSpace customFrustum;
     Animator filmAnimator;
     Animator animator;
     float checkTimer, waitTime = 0.25f;
     bool isFilmSpawned;
     GameObject spawnedFilm;
     bool isRotating;
+    public bool isCutOperationInProgress = false; 
 
     DepthOfField depthOfField;
 
@@ -33,12 +35,20 @@ public class Polaroid : MonoBehaviour
         depthOfField.active = false;
         polaroidCamera.SetActive(false);
         viewFinder.SetActive(false);
+
+        if (customFrustumLocalSpace != null)
+        {
+            customFrustumLocalSpace.polaroid = this;
+        }
     }
 
     void Update() {
 
         if (Input.GetKeyDown(KeyCode.T))
             Rotate();
+
+        if (isRotating || isCutOperationInProgress)
+            return; 
 
         if (!isRotating)
         {
@@ -70,7 +80,7 @@ public class Polaroid : MonoBehaviour
                         animator.SetTrigger("Film");
                         isFilmSpawned = true;
                         checkTimer = 0;
-                        customFrustumLocalSpace.Cut(true);
+                        StartCoroutine(DelayedCut(true)); 
                     }            
                     else if (Input.GetKeyDown(KeyCode.Mouse1) && animator.GetCurrentAnimatorStateInfo(0).IsName("Look"))
                     {
@@ -90,7 +100,7 @@ public class Polaroid : MonoBehaviour
                     }
                     else if (Input.GetKeyDown(KeyCode.Mouse0) && filmAnimator != null && filmAnimator.GetCurrentAnimatorStateInfo(0).IsName("Look"))
                     {
-                        customFrustumLocalSpace.Cut(false);
+                        StartCoroutine(DelayedCut(false));
                         StartCoroutine(FilmOut());
                     }            
                     else if (Input.GetKeyDown(KeyCode.Mouse1) && filmAnimator != null && filmAnimator.GetCurrentAnimatorStateInfo(0).IsName("Look"))
@@ -117,7 +127,20 @@ public class Polaroid : MonoBehaviour
         isFilmSpawned = false;
         animator.SetTrigger("FilmOut");
         // playerController.ChangePlayerState(true);
-    } 
+    }
+
+    private IEnumerator DelayedCut(bool isTakingPicture)
+    {
+
+        isCutOperationInProgress = true;
+
+        yield return null; // wait one frame so colliders and transforms update
+        yield return null; // optional second frame for safety
+
+        customFrustumLocalSpace.StartCutOperation(isTakingPicture); 
+
+        Debug.Log($"[Polaroid] Triggering delayed Cut() at {Time.time}"); 
+    }
 
     void Rotate() {
         if (spawnedFilm != null)
